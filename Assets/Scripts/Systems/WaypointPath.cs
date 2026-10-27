@@ -30,9 +30,11 @@ public class WaypointPath : MonoBehaviour
 
     public Vector3 GetPointPosition(int index)
     {
-        if (Count == 0) return transform.position;
+        if (Count == 0)
+        {
+            return transform.position;
+        }
 
-        // Защита от выхода за границы (зацикливаем)
         index = ((index % Count) + Count) % Count;
         return _waypoints[index].position;
     }

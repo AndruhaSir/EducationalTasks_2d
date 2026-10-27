@@ -1,95 +1,57 @@
-using System;
 using System.Collections;
 using UnityEngine;
 
-[RequireComponent(typeof(Rigidbody2D))]
 public class PatrolMovement : MonoBehaviour
 {
     [SerializeField] private WaypointPath _path;
-
-    [SerializeField] private float _speed = 2f;
     [SerializeField] private float _waitTimeAtPoint = 1f;
     [SerializeField] private float _arrivalThreshold = 0.2f;
-    [SerializeField] private bool _useDirectMovement = false;
 
-    private Rigidbody2D _rigidbody;
-    private SpriteFlipper _spriteFlipper;
-    private int _currentPointIndex = 0;
-    private bool _isWaiting = false;
+    private int _currentPointIndex;
+    private bool _isWaiting;
 
-    private Coroutine _waitCoroutine;
+    private float ArrivalThresholdSqr => _arrivalThreshold * _arrivalThreshold;
 
     private void Awake()
     {
-        if (_path == null || _path.Count == 0)
+        if (_path == null)
         {
             Debug.LogError("Не все компоненты назначены", this);
             enabled = false;
             return;
         }
-        
-        _rigidbody = GetComponent<Rigidbody2D>();
-        _spriteFlipper = GetComponent<SpriteFlipper>();
-    }
 
-    private void Start()
-    {
         _currentPointIndex = _path.GetClosestPointIndex(transform.position);
     }
 
-    private void FixedUpdate()
+    public bool TryGetDirection(Vector2 position, out Vector2 direction)
     {
-        if (_path.Count == 0 || _isWaiting) return;
-
-        Move();
-    }
-
-    private bool HasReachedTarget(Vector3 targetPosition)
-    {
-        return (targetPosition - transform.position).sqrMagnitude < _arrivalThreshold * _arrivalThreshold;
-    }
-
-    private void Move()
-    {
-        Vector3 targetPosition = _path.GetPointPosition(_currentPointIndex);
-
-        if (HasReachedTarget(targetPosition))
+        direction = Vector2.zero;
+        
+        if (enabled == false || _isWaiting)
         {
-            StartWaiting();
-            return;
+            return false;
         }
 
-        Vector3 direction = (targetPosition - transform.position).normalized;
+        Vector2 targetPosition = _path.GetPointPosition(_currentPointIndex);
+        Vector2 offset = targetPosition - position;
 
-        if (_useDirectMovement)
+        if (offset.sqrMagnitude < ArrivalThresholdSqr)
         {
-            _rigidbody.velocity = direction * _speed;
-        }
-        else
-        {
-            _rigidbody.velocity = new Vector2(direction.x * _speed, _rigidbody.velocity.y);
+            StartCoroutine(WaitAtPoint());
+            return false;
         }
 
-        _spriteFlipper.Flip(direction.x);
+        direction = offset.normalized;
+        return true;
     }
 
-    private void StartWaiting()
+    private IEnumerator WaitAtPoint()
     {
         _isWaiting = true;
-        _rigidbody.velocity = Vector2.zero;
-
-        if (_waitCoroutine != null)
-            StopCoroutine(_waitCoroutine);
-
-        _waitCoroutine = StartCoroutine(WaitAtPointRoutine());
-    }
-
-    private IEnumerator WaitAtPointRoutine()
-    {
         yield return new WaitForSeconds(_waitTimeAtPoint);
 
         _currentPointIndex++;
         _isWaiting = false;
-        _waitCoroutine = null;
     }
 }

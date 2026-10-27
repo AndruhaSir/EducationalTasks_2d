@@ -26,7 +26,6 @@ public class CoinSpawner : MonoBehaviour
             if (spawnPoint != null)
             {
                 availablePoints.Add(spawnPoint);
-                Debug.Log($"Добавлена точка: {spawnPoint.name}, позиция: {spawnPoint.position}");
             }
         }
 
