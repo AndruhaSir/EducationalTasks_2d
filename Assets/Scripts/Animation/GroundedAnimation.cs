@@ -1,12 +1,12 @@
 using System;
 using UnityEngine;
 
-public class GroundedAnimation : IAnimationBehaviour
+public class GroundedAnimation : IAnimationParameter
 {
     private readonly int _isGroundedHash = Animator.StringToHash("IsGrounded");
 
-    public void Apply(Animator animator, AnimationState state)
+    public void Apply(Animator animator, AnimationParameter parameter)
     {
-        animator.SetBool(_isGroundedHash, state.IsGrounded);
+        animator.SetBool(_isGroundedHash, parameter.IsGrounded);
     }
 }

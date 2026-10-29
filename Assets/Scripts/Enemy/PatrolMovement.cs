@@ -16,7 +16,7 @@ public class PatrolMovement : MonoBehaviour
     {
         if (_path == null)
         {
-            Debug.LogError("Не все компоненты назначены", this);
+            Debug.LogError($"Не назначен компонент {nameof(_path)}", this);
             enabled = false;
             return;
         }

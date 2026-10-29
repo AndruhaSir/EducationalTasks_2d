@@ -4,9 +4,12 @@ using UnityEngine;
 public class AnimationSwitcher
 {
     private readonly Animator _animator;
-    private readonly List<IAnimationBehaviour> _behaviours = new List<IAnimationBehaviour>();
+    private readonly List<IAnimationParameter> _parameters = new List<IAnimationParameter>();
+    private readonly int _attackHash = Animator.StringToHash("Attack");
+    private readonly int _takeHitHash = Animator.StringToHash("TakeHit");
+    private readonly int _deathHash = Animator.StringToHash("Death");
 
-    private AnimationState _previousState;
+    private AnimationParameter _previousParameter;
     private bool _hasPreviousState;
 
     public AnimationSwitcher(Animator animator)
@@ -14,36 +17,42 @@ public class AnimationSwitcher
         _animator = animator;
     }
 
-    public void AddBehaviour(IAnimationBehaviour behaviour)
+    public void AddParameter(IAnimationParameter parameter)
     {
-        _behaviours.Add(behaviour);
+        _parameters.Add(parameter);
     }
-
-    public void ClearBehaviours()
+    
+    public void Update(AnimationParameter parameter)
     {
-        _behaviours.Clear();
-        _hasPreviousState = false;
-    }
-
-    public void Update(AnimationState state)
-    {
-        if (_hasPreviousState && Mathf.Approximately(_previousState.Speed, state.Speed) &&
-            _previousState.IsGrounded == state.IsGrounded)
+        if (_hasPreviousState &&
+            Mathf.Approximately(_previousParameter.Speed, parameter.Speed) &&
+            _previousParameter.IsGrounded == parameter.IsGrounded)
         {
             return;
         }
 
-        foreach (IAnimationBehaviour behaviour in _behaviours)
+        foreach (IAnimationParameter behaviour in _parameters)
         {
-            behaviour.Apply(_animator, state);
+            behaviour.Apply(_animator, parameter);
         }
 
-        _previousState = new AnimationState
+        _previousParameter = new AnimationParameter
         {
-            Speed = state.Speed,
-            IsGrounded = state.IsGrounded
+            Speed = parameter.Speed,
+            IsGrounded = parameter.IsGrounded
         };
 
         _hasPreviousState = true;
+    }
+
+    public void PlayAttack() => _animator.SetTrigger(_attackHash);
+
+    public void PlayTakeHit() => _animator.SetTrigger(_takeHitHash);
+
+    public void PlayDeath()
+    {
+        _animator.ResetTrigger(_attackHash);
+        _animator.ResetTrigger(_takeHitHash);
+        _animator.SetTrigger(_deathHash);
     }
 }
