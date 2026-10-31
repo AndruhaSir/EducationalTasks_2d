@@ -4,7 +4,7 @@ using UnityEngine;
 public class AnimationSwitcher
 {
     private readonly Animator _animator;
-    private readonly List<IAnimationParameter> _parameters = new List<IAnimationParameter>();
+    private readonly List<IAnimationWithParameter> _parameters = new List<IAnimationWithParameter>();
     private readonly int _attackHash = Animator.StringToHash("Attack");
     private readonly int _takeHitHash = Animator.StringToHash("TakeHit");
     private readonly int _deathHash = Animator.StringToHash("Death");
@@ -17,9 +17,9 @@ public class AnimationSwitcher
         _animator = animator;
     }
 
-    public void AddParameter(IAnimationParameter parameter)
+    public void AddParameter(IAnimationWithParameter withParameter)
     {
-        _parameters.Add(parameter);
+        _parameters.Add(withParameter);
     }
     
     public void Update(AnimationParameter parameter)
@@ -31,17 +31,12 @@ public class AnimationSwitcher
             return;
         }
 
-        foreach (IAnimationParameter behaviour in _parameters)
+        foreach (IAnimationWithParameter behaviour in _parameters)
         {
             behaviour.Apply(_animator, parameter);
         }
 
-        _previousParameter = new AnimationParameter
-        {
-            Speed = parameter.Speed,
-            IsGrounded = parameter.IsGrounded
-        };
-
+        _previousParameter = parameter;
         _hasPreviousState = true;
     }
 

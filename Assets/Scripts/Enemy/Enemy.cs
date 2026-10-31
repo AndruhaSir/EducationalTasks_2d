@@ -14,6 +14,8 @@ public class Enemy : MonoBehaviour, IDamageable
     [Header("Visual")] [SerializeField] private Animator _animator;
     [SerializeField, Min(0.01f)] private float _deathAnimationDuration = 1.03f;
 
+    [Header("Combat")] [SerializeField] private AttackHitbox _attackHitbox;
+
     private Rigidbody2D _rigidbody;
     private SpriteRotator _spriteRotator;
     private PatrolMovement _patrolMovement;
@@ -22,12 +24,12 @@ public class Enemy : MonoBehaviour, IDamageable
     private Health _health;
 
     private StateMachine<IState> _stateMachine;
-    private AnimationParameter _animationParameter;
-    private PatrolState _patrolState;
-    private ChaseState _chaseState;
+    private EnemyPatrolState _enemyPatrolState;
+    private EnemyChaseState _enemyChaseState;
     private EnemyAttackState _attackState;
     private DeathState _deathState;
-    private AttackHitbox2D _attackHitbox;
+
+    private AnimationParameter _animationParameter;
     private bool _targetInAttackRange;
     private float _nextAttackTime;
 
@@ -44,18 +46,12 @@ public class Enemy : MonoBehaviour, IDamageable
         _spriteRotator = GetComponent<SpriteRotator>();
         _patrolMovement = GetComponent<PatrolMovement>();
 
-        if (_animator == null)
-        {
-            _animator = GetComponentInChildren<Animator>();
-        }
-
         _mover = new Mover(_rigidbody, _speed);
         _health = new Health(_startHitpoints);
-        _attackHitbox = GetComponentInChildren<AttackHitbox2D>(true);
 
         _stateMachine = new StateMachine<IState>();
-        _patrolState = new PatrolState(this);
-        _chaseState = new ChaseState(this);
+        _enemyPatrolState = new EnemyPatrolState(this);
+        _enemyChaseState = new EnemyChaseState(this);
         _attackState = new EnemyAttackState(this, _attackDuration);
         _animationParameter = new AnimationParameter();
         _deathState = new DeathState(_deathAnimationDuration, EnterDeath, () => Destroy(this.gameObject));
@@ -66,7 +62,7 @@ public class Enemy : MonoBehaviour, IDamageable
 
     private void Start()
     {
-        _stateMachine.ChangeState(_patrolState);
+        _stateMachine.ChangeState(_enemyPatrolState);
     }
 
     private void Update()
@@ -106,17 +102,17 @@ public class Enemy : MonoBehaviour, IDamageable
 
     public void ChangeToPatrol()
     {
-        _stateMachine.ChangeState(_patrolState);
+        _stateMachine.ChangeState(_enemyPatrolState);
     }
 
     public void ChangeToChase()
     {
-        _stateMachine.ChangeState(_chaseState);
+        _stateMachine.ChangeState(_enemyChaseState);
     }
 
     public void ChangeToAttack()
     {
-        if (CanAttack && _targetInAttackRange && _health.IsDead == false)
+        if (CanAttack && _targetInAttackRange && !_health.IsDead)
         {
             _stateMachine.ChangeState(_attackState);
         }

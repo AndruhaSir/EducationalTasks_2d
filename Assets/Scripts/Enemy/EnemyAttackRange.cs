@@ -9,10 +9,7 @@ public class EnemyAttackRange : MonoBehaviour
 
     private void Awake()
     {
-        if (_enemy == null)
-        {
-            _enemy = GetComponentInParent<Enemy>();
-        }
+        _enemy = GetComponentInParent<Enemy>();
     }
 
     private void OnTriggerEnter2D(Collider2D other)

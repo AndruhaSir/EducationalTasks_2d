@@ -2,11 +2,11 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(Collider2D))]
-public class AttackHitbox2D : MonoBehaviour
+public class AttackHitbox : MonoBehaviour
 {
     [SerializeField, Min(1)] private int _damage = 10;
     private Collider2D _collider;
-    private readonly HashSet<Hurtbox2D> _damagedTargets = new HashSet<Hurtbox2D>();
+    private readonly HashSet<Hurtbox> _damagedTargets = new HashSet<Hurtbox>();
 
     private void Awake()
     {
@@ -28,7 +28,7 @@ public class AttackHitbox2D : MonoBehaviour
 
     private void OnTriggerStay2D(Collider2D other)
     {
-        Hurtbox2D hurtbox = other.GetComponent<Hurtbox2D>();
+        Hurtbox hurtbox = other.GetComponent<Hurtbox>();
         if (hurtbox != null && _damagedTargets.Add(hurtbox))
         {
             hurtbox.TakeDamage(_damage);

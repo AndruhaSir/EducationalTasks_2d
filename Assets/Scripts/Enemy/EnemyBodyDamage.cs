@@ -18,7 +18,7 @@ public class EnemyBodyDamage : MonoBehaviour
             return;
         }
 
-        Hurtbox2D hurtbox = other.GetComponent<Hurtbox2D>();
+        Hurtbox hurtbox = other.GetComponent<Hurtbox>();
 
         if (hurtbox != null)
         {

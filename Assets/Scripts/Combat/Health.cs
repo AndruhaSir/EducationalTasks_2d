@@ -30,7 +30,7 @@ public class Health : IHealth, IDamageable
 
     public void Heal(int amount)
     {
-        if (IsDead || CanBeHealed == false)
+        if (IsDead || !CanBeHealed)
         {
             return;
         }

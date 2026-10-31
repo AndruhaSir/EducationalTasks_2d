@@ -23,7 +23,7 @@ public class Player : MonoBehaviour, IDamageable
     [SerializeField, Min(0.01f)] private float _attackStateDuration = 0.52f;
     [SerializeField, Min(0.01f)] private float _invulnerabilityDuration = 1f;
     [SerializeField, Min(0.01f)] private float _deathAnimationDuration = 1.03f;
-    [SerializeField] private AttackHitbox2D _attackHitbox;
+    [SerializeField] private AttackHitbox _attackHitbox;
 
     [Header("Visual")] [SerializeField] private PlayerStatsUI _playerStatsUI;
     [SerializeField] private Animator _animator;

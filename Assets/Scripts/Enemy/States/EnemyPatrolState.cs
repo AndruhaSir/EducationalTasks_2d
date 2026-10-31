@@ -1,10 +1,10 @@
 using UnityEngine;
 
-public class PatrolState : IState
+public class EnemyPatrolState : IState
 {
     private readonly Enemy _enemy;
 
-    public PatrolState(Enemy enemy)
+    public EnemyPatrolState(Enemy enemy)
     {
         _enemy = enemy;
     }

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Hurtbox2D : MonoBehaviour
+public class Hurtbox : MonoBehaviour
 {
     private IDamageable _damageable;
 
@@ -10,7 +10,7 @@ public class Hurtbox2D : MonoBehaviour
 
         if (_damageable == null)
         {
-            Debug.LogError($"{nameof(Hurtbox2D)} не все компоненты подключены", this);
+            Debug.LogError($"{nameof(Hurtbox)} не все компоненты подключены", this);
             enabled = false;
         }
     }

@@ -432,6 +432,7 @@ MonoBehaviour:
   _attackDuration: 0.7
   _animator: {fileID: 6056926934898731677}
   _deathAnimationDuration: 1.05
+  _attackHitbox: {fileID: 8046977582675723655}
 --- !u!114 &7062158050272712928
 MonoBehaviour:
   m_ObjectHideFlags: 0

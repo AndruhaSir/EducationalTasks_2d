@@ -8,6 +8,11 @@ public class CollisionHandler : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
+        CheckCollectablesItems(other);
+    }
+
+    private void CheckCollectablesItems(Collider2D other)
+    {
         if (other.TryGetComponent(out Coin coin))
         {
             CoinEntered?.Invoke(coin);

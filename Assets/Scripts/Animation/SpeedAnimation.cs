@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class SpeedAnimation : IAnimationParameter
+public class SpeedAnimation : IAnimationWithParameter
 {
     private readonly int _speedHash = Animator.StringToHash("Speed");
 

@@ -1,10 +1,10 @@
 using UnityEngine;
 
-public class ChaseState : IState
+public class EnemyChaseState : IState
 {
     private readonly Enemy _enemy;
 
-    public ChaseState(Enemy enemy)
+    public EnemyChaseState(Enemy enemy)
     {
         _enemy = enemy;
     }

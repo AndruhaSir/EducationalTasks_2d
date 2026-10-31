@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-public class GroundedAnimation : IAnimationParameter
+public class GroundedAnimation : IAnimationWithParameter
 {
     private readonly int _isGroundedHash = Animator.StringToHash("IsGrounded");
 
