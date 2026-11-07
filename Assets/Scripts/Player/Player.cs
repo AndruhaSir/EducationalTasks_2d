@@ -26,6 +26,7 @@ public class Player : MonoBehaviour, IDamageable
     [SerializeField] private AttackHitbox _attackHitbox;
 
     [Header("Visual")] [SerializeField] private PlayerStatsUI _playerStatsUI;
+    [SerializeField] private HealthBarUI _healthBarUI;
     [SerializeField] private Animator _animator;
 
     [Header("Stats")] [SerializeField] private int _startHitpoints = 100;
@@ -69,8 +70,6 @@ public class Player : MonoBehaviour, IDamageable
         _spriteRotator = GetComponent<SpriteRotator>();
 
         _playerStatsUI.UpdateCoins(_playerStats.Coins);
-        _playerStatsUI.UpdateHitpoints(_health.Current);
-
         _collisionHandler = GetComponent<CollisionHandler>();
         _animationSwitcher = new AnimationSwitcher(_animator);
         _animationSwitcher.AddParameter(new GroundedAnimation());
@@ -85,20 +84,21 @@ public class Player : MonoBehaviour, IDamageable
     private void Start()
     {
         ChangeToControl();
+        UpdateHealthBar();
     }
 
     private void OnEnable()
     {
         _collisionHandler.CoinEntered += CollectCoin;
         _collisionHandler.MedkitEntered += CollectMedkit;
-        _health.HealthChanged += OnHealthChanged;
+        _health.HealthChanged += UpdateHealthBar;
     }
 
     private void OnDisable()
     {
         _collisionHandler.CoinEntered -= CollectCoin;
         _collisionHandler.MedkitEntered -= CollectMedkit;
-        _health.HealthChanged -= OnHealthChanged;
+        _health.HealthChanged -= UpdateHealthBar;
     }
 
     private void Update()
@@ -137,9 +137,9 @@ public class Player : MonoBehaviour, IDamageable
         medkit.Collect(_health);
     }
 
-    private void OnHealthChanged()
+    private void UpdateHealthBar()
     {
-        _playerStatsUI.UpdateHitpoints(_health.Current);
+        _healthBarUI?.SetHealth(_health.Current, _health.Max);
     }
 
     private void CollectCoin(Coin coin)

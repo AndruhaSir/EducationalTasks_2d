@@ -14,6 +14,8 @@ public class Enemy : MonoBehaviour, IDamageable
     [Header("Visual")] [SerializeField] private Animator _animator;
     [SerializeField, Min(0.01f)] private float _deathAnimationDuration = 1.03f;
 
+    [Header("UI")] [SerializeField] private HealthBarUI _healthBarUI;
+
     [Header("Combat")] [SerializeField] private AttackHitbox _attackHitbox;
 
     private Rigidbody2D _rigidbody;
@@ -65,6 +67,25 @@ public class Enemy : MonoBehaviour, IDamageable
         _stateMachine.ChangeState(_enemyPatrolState);
     }
 
+    private void OnEnable()
+    {
+        if (_health == null)
+        {
+            return;
+        }
+
+        _health.HealthChanged += UpdateHealthBar;
+        UpdateHealthBar();
+    }
+
+    private void OnDisable()
+    {
+        if (_health != null)
+        {
+            _health.HealthChanged -= UpdateHealthBar;
+        }
+    }
+
     private void Update()
     {
         _animationParameter.Speed = _rigidbody.velocity.magnitude;
@@ -93,6 +114,11 @@ public class Enemy : MonoBehaviour, IDamageable
     public void PlayDamageAnimation()
     {
         _animationSwitcher.PlayTakeHit();
+    }
+
+    private void UpdateHealthBar()
+    {
+        _healthBarUI?.SetHealth(_health.Current, _health.Max);
     }
 
     public void SetTargetInAttackRange(bool isInRange)
