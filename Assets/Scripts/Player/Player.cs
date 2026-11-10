@@ -26,7 +26,7 @@ public class Player : MonoBehaviour, IDamageable
     [SerializeField] private AttackHitbox _attackHitbox;
 
     [Header("Visual")] [SerializeField] private PlayerStatsUI _playerStatsUI;
-    [SerializeField] private HealthBarUI _healthBarUI;
+    [SerializeField] private HealthBar _healthBar;
     [SerializeField] private Animator _animator;
 
     [Header("Stats")] [SerializeField] private int _startHitpoints = 100;
@@ -66,6 +66,7 @@ public class Player : MonoBehaviour, IDamageable
         _animationParameter = new AnimationParameter();
         _playerStats = new PlayerStats();
         _health = new Health(_startHitpoints, true);
+        _healthBar.Initialize(_health.Max);
 
         _spriteRotator = GetComponent<SpriteRotator>();
 
@@ -139,7 +140,7 @@ public class Player : MonoBehaviour, IDamageable
 
     private void UpdateHealthBar()
     {
-        _healthBarUI?.SetHealth(_health.Current, _health.Max);
+        _healthBar.UpdateVisual(_health.Current);
     }
 
     private void CollectCoin(Coin coin)

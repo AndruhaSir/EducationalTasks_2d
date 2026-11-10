@@ -14,7 +14,7 @@ public class Enemy : MonoBehaviour, IDamageable
     [Header("Visual")] [SerializeField] private Animator _animator;
     [SerializeField, Min(0.01f)] private float _deathAnimationDuration = 1.03f;
 
-    [Header("UI")] [SerializeField] private HealthBarUI _healthBarUI;
+    [Header("UI")] [SerializeField] private HealthBar _healthBar;
 
     [Header("Combat")] [SerializeField] private AttackHitbox _attackHitbox;
 
@@ -50,6 +50,7 @@ public class Enemy : MonoBehaviour, IDamageable
 
         _mover = new Mover(_rigidbody, _speed);
         _health = new Health(_startHitpoints);
+        _healthBar.Initialize(_health.Max);
 
         _stateMachine = new StateMachine<IState>();
         _enemyPatrolState = new EnemyPatrolState(this);
@@ -118,7 +119,7 @@ public class Enemy : MonoBehaviour, IDamageable
 
     private void UpdateHealthBar()
     {
-        _healthBarUI?.SetHealth(_health.Current, _health.Max);
+        _healthBar?.UpdateVisual(_health.Current);
     }
 
     public void SetTargetInAttackRange(bool isInRange)
