@@ -15,8 +15,8 @@ public class Hurtbox : MonoBehaviour
         }
     }
 
-    public void TakeDamage(int damage)
+    public int TakeDamage(int damage)
     {
-        _damageable?.TakeDamage(damage);
+        return _damageable.TakeDamage(damage);
     }
 }

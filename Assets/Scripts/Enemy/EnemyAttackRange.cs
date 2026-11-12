@@ -14,7 +14,7 @@ public class EnemyAttackRange : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.GetComponentInParent<Player>() == null)
+        if (other.TryGetComponent<Hurtbox>(out _) == false)
         {
             return;
         }
@@ -25,7 +25,7 @@ public class EnemyAttackRange : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D other)
     {
-        if (other.GetComponentInParent<Player>() == null)
+        if (other.TryGetComponent<Hurtbox>(out _) == false)
         {
             return;
         }

@@ -17,6 +17,11 @@ public class PlayerControlState : IState, IFixedTickState
             return;
         }
 
+        if (_player.AbilityPressed)
+        {
+            _player.UseAbility();
+        }
+        
         _player.UpdateMovementInput();
     }
 

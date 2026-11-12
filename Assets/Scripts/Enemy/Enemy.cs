@@ -8,6 +8,7 @@ public class Enemy : MonoBehaviour, IDamageable
     [Header("Movement")] [SerializeField] private float _speed = 2f;
     [SerializeField] private bool _useDirectMovement;
     [SerializeField, Min(1)] private int _startHitpoints = 10;
+    [SerializeField, Min(0f)] private float _damageAnimationCooldown = 0.75f;
     [SerializeField, Min(0.01f)] private float _attackCooldown = 1.5f;
     [SerializeField, Min(0.01f)] private float _attackDuration = 0.67f;
 
@@ -34,6 +35,7 @@ public class Enemy : MonoBehaviour, IDamageable
     private AnimationParameter _animationParameter;
     private bool _targetInAttackRange;
     private float _nextAttackTime;
+    private float _nextDamageAnimationTime;
 
     public Rigidbody2D Rigidbody => _rigidbody;
     public PatrolMovement PatrolMovement => _patrolMovement;
@@ -191,23 +193,30 @@ public class Enemy : MonoBehaviour, IDamageable
         _mover.Stop();
     }
 
-    public void TakeDamage(int damage)
+    public int TakeDamage(int damage)
     {
-        if (_health.IsDead)
+        if (damage <= 0 || _health.IsDead)
         {
-            return;
+            return 0;
         }
 
-        _health.TakeDamage(damage);
+        int dealtDamage = _health.TakeDamage(damage);
+        if (dealtDamage <= 0)
+        {
+            return 0;
+        }
 
         if (_health.IsDead)
         {
             _stateMachine.ChangeState(_deathState);
         }
-        else
+        else if (Time.time >= _nextDamageAnimationTime)
         {
             PlayDamageAnimation();
+            _nextDamageAnimationTime = Time.time + _damageAnimationCooldown;
         }
+
+        return dealtDamage;
     }
 
     private void EnterDeath()

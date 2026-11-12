@@ -19,11 +19,19 @@ public class Player : MonoBehaviour, IDamageable
     [Header("Movement")] [SerializeField] private string _horizontalAxis = "Horizontal";
     [SerializeField] private float _speed = 8f;
 
-    [Header("Combat")] [SerializeField] private KeyCode _attackKey = KeyCode.Mouse0;
+    [Header("Combat")]
+    [SerializeField] private KeyCode _attackKey = KeyCode.Mouse0;
+
+    [SerializeField] private KeyCode _abilityKey = KeyCode.F;
     [SerializeField, Min(0.01f)] private float _attackStateDuration = 0.52f;
     [SerializeField, Min(0.01f)] private float _invulnerabilityDuration = 1f;
     [SerializeField, Min(0.01f)] private float _deathAnimationDuration = 1.03f;
     [SerializeField] private AttackHitbox _attackHitbox;
+    [SerializeField] private Vampirism _vampirism;
+    [SerializeField, Min(0f)] private int _vampirismDamagePerTick = 5;
+    [SerializeField, Min(0f)] private float _vampirismDamageCooldown = 0.5f;
+    [SerializeField] private float _vampirismDuration = 6f;
+    [SerializeField] private float _vampirismCooldownDuration = 4f;
 
     [Header("Visual")] [SerializeField] private PlayerStatsUI _playerStatsUI;
     [SerializeField] private HealthBar _healthBar;
@@ -53,13 +61,14 @@ public class Player : MonoBehaviour, IDamageable
     private bool _pendingDamageAnimation;
 
     public bool AttackPressed => _input.AttackPressed;
+    public bool AbilityPressed => _input.AbilityPressed;
     public bool IsGrounded => _isGrounded;
 
     private void Awake()
     {
         _rigidbody = GetComponent<Rigidbody2D>();
 
-        _input = new PlayerInput(_jumpKey, _horizontalAxis, _attackKey);
+        _input = new PlayerInput(_jumpKey, _horizontalAxis, _attackKey, _abilityKey);
         _groundChecker = new GroundChecker(_groundCheckPoint, _groundCheckRadius, _groundLayer);
         _jumper = new Jumper(_rigidbody, _jumpForce);
         _mover = new Mover(_rigidbody, _speed);
@@ -67,6 +76,8 @@ public class Player : MonoBehaviour, IDamageable
         _playerStats = new PlayerStats();
         _health = new Health(_startHitpoints, true);
         _healthBar.Initialize(_health.Max);
+        _vampirism.Initialize(_abilityKey, _vampirismDuration, _vampirismCooldownDuration, _vampirismDamageCooldown,
+            _vampirismDamagePerTick);
 
         _spriteRotator = GetComponent<SpriteRotator>();
 
@@ -156,14 +167,19 @@ public class Player : MonoBehaviour, IDamageable
         _playerStatsUI.UpdateCoins(_playerStats.Coins);
     }
 
-    public void TakeDamage(int damage)
+    public void UseAbility()
     {
-        if (_health.IsDead || _invulnerabilityTimeRemaining > 0f)
+        _vampirism.UseAbility(_health);
+    }
+
+    public int TakeDamage(int damage)
+    {
+        if (_invulnerabilityTimeRemaining > 0f)
         {
-            return;
+            return 0;
         }
 
-        _health.TakeDamage(damage);
+        int dealtDamage = _health.TakeDamage(damage);
 
         if (_health.IsDead)
         {
@@ -182,6 +198,8 @@ public class Player : MonoBehaviour, IDamageable
                 PlayDamageAnimation();
             }
         }
+
+        return dealtDamage;
     }
 
     public void ChangeToControl()

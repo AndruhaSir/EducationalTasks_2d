@@ -16,16 +16,20 @@ public class Health : IHealth, IDamageable
         CanBeHealed = canBeHealed;
     }
 
-    public void TakeDamage(int damage)
+    public int TakeDamage(int damage)
     {
         if (damage <= 0 || IsDead)
         {
-            return;
+            return 0;
         }
 
+        int previous = Current;
+        
         Current = Math.Max(0, Current - damage);
 
         HealthChanged?.Invoke();
+
+        return previous - Current;
     }
 
     public void Heal(int amount)
