@@ -1662,6 +1662,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 1828448582070783850, guid: 8150181b55908874785c8b94a323ed0e, type: 3}
   m_PrefabInstance: {fileID: 1399054406}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &819861734 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7937742209266537989, guid: 25ef7a51c4e8b4744b63ecdb326789a5, type: 3}
+  m_PrefabInstance: {fileID: 7869845668119919224}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4b71260d7b4f495e8dbb03c88ab9dc81, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &833041055 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1828448582070783850, guid: 8150181b55908874785c8b94a323ed0e, type: 3}
@@ -6328,6 +6339,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _fillImage: {fileID: 1192769605}
   _activationKeyText: {fileID: 778627154}
+  _vampirism: {fileID: 819861734}
 --- !u!1001 &2340148185601290665
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6549,6 +6561,22 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7208508179260375824, guid: 2b2743f36699dd444b651f644db49784, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7208508179260375824, guid: 2b2743f36699dd444b651f644db49784, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7208508179260375824, guid: 2b2743f36699dd444b651f644db49784, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7208508179260375824, guid: 2b2743f36699dd444b651f644db49784, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -6562,6 +6590,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 244980408336123907, guid: 25ef7a51c4e8b4744b63ecdb326789a5, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1850379826846045857, guid: 25ef7a51c4e8b4744b63ecdb326789a5, type: 3}
       propertyPath: m_LocalPosition.x
       value: -3.3086853
@@ -6606,22 +6638,6 @@ PrefabInstance:
       propertyPath: _healthBar
       value: 
       objectReference: {fileID: 1354638825}
-    - target: {fileID: 4321320984425674491, guid: 25ef7a51c4e8b4744b63ecdb326789a5, type: 3}
-      propertyPath: _vampirismDamagePerTick
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4321320984425674491, guid: 25ef7a51c4e8b4744b63ecdb326789a5, type: 3}
-      propertyPath: _vampirismDamageCooldown
-      value: 0.1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5855061706154555237, guid: 25ef7a51c4e8b4744b63ecdb326789a5, type: 3}
-      propertyPath: _damage
-      value: 30
-      objectReference: {fileID: 0}
-    - target: {fileID: 5946593842717349941, guid: 25ef7a51c4e8b4744b63ecdb326789a5, type: 3}
-      propertyPath: _damagePerTick
-      value: 10
-      objectReference: {fileID: 0}
     - target: {fileID: 7447509800558838476, guid: 25ef7a51c4e8b4744b63ecdb326789a5, type: 3}
       propertyPath: _coinsTextMeshPro
       value: 
@@ -6630,10 +6646,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
-    - target: {fileID: 7937742209266537989, guid: 25ef7a51c4e8b4744b63ecdb326789a5, type: 3}
-      propertyPath: _view
-      value: 
-      objectReference: {fileID: 2401000003}
+    - target: {fileID: 8714519301702564641, guid: 25ef7a51c4e8b4744b63ecdb326789a5, type: 3}
+      propertyPath: m_Name
+      value: VampirismDamager
+      objectReference: {fileID: 0}
     - target: {fileID: 8714519301702564641, guid: 25ef7a51c4e8b4744b63ecdb326789a5, type: 3}
       propertyPath: m_IsActive
       value: 0

@@ -4,7 +4,7 @@ using UnityEngine;
 [RequireComponent(typeof(CircleCollider2D))]
 public class VampirismDamager : MonoBehaviour
 {
-    private int _damagePerTick = 5;
+    private int _damagePerTick = 6;
 
     private readonly HashSet<Collider2D> _targetsInRange = new HashSet<Collider2D>();
 

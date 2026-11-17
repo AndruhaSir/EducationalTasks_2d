@@ -1,4 +1,5 @@
 using System.Collections;
+using System;
 using UnityEngine;
 
 public class Vampirism : MonoBehaviour
@@ -8,23 +9,25 @@ public class Vampirism : MonoBehaviour
    private float _damageCooldown;
 
     [SerializeField] private VampirismDamager _damager;
-    [SerializeField] private VampirismView _view;
-
     private Coroutine _abilityCoroutine;
+    private KeyCode _activationKey;
+
+    public event Action<float, bool> ProgressChanged;
+    public event Action<KeyCode> ActivationKeyChanged;
+
+    public float Progress { get; private set; }
+    public bool ProgressClockwise { get; private set; } = true;
+    public KeyCode ActivationKey => _activationKey;
 
     private void Awake()
     {
-        if (_damager == null)
-        {
-            _damager = GetComponent<VampirismDamager>();
-        }
-
-        _view.SetProgress(0f);
+        SetProgress(0f);
     }
 
     public void Initialize(KeyCode key, float abilityDuration, float cooldownDuration, float damageCooldown, int damagePerTick)
     {
-        _view.SetActivationKey(key);
+        _activationKey = key;
+        ActivationKeyChanged?.Invoke(key);
         _abilityDuration = abilityDuration;
         _cooldownDuration = cooldownDuration;
         _damageCooldown = damageCooldown;
@@ -58,7 +61,7 @@ public class Vampirism : MonoBehaviour
             }
 
             elapsed += deltaTime;
-            _view.SetProgress(elapsed / _abilityDuration);
+            SetProgress(elapsed / _abilityDuration);
 
             if (elapsed < _abilityDuration)
             {
@@ -68,7 +71,7 @@ public class Vampirism : MonoBehaviour
 
         _damager.gameObject.SetActive(false);
         elapsed = 0f;
-        _view.SetProgress(1f);
+        SetProgress(1f);
 
         while (elapsed < _cooldownDuration)
         {
@@ -76,10 +79,17 @@ public class Vampirism : MonoBehaviour
 
             float deltaTime = Mathf.Min(Time.deltaTime, _cooldownDuration - elapsed);
             elapsed += deltaTime;
-            _view.SetProgress(1 - elapsed / _cooldownDuration, false);
+            SetProgress(1f - elapsed / _cooldownDuration, false);
         }
 
-        _view.SetProgress(0);
+        SetProgress(0f);
         _abilityCoroutine = null;
+    }
+
+    private void SetProgress(float progress, bool clockwise = true)
+    {
+        Progress = progress;
+        ProgressClockwise = clockwise;
+        ProgressChanged?.Invoke(progress, clockwise);
     }
 }

@@ -16,7 +16,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &6776987092164283001
 Transform:
   m_ObjectHideFlags: 0
@@ -45,10 +45,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4b71260d7b4f495e8dbb03c88ab9dc81, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _abilityDuration: 6
-  _cooldownDuration: 4
-  _damager: {fileID: 5946593842717349941}
-  _view: {fileID: 0}
+  _damager: {fileID: 2326332952926492574}
 --- !u!1 &772586461866846441
 GameObject:
   m_ObjectHideFlags: 0
@@ -146,7 +143,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2da22c78d5aa4d3286a7633443f0aa31, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _damage: 10
+  _damage: 30
 --- !u!1 &1528913844556880057
 GameObject:
   m_ObjectHideFlags: 0
@@ -5312,6 +5309,10 @@ MonoBehaviour:
   _deathAnimationDuration: 1.03
   _attackHitbox: {fileID: 5855061706154555237}
   _vampirism: {fileID: 7937742209266537989}
+  _vampirismDamagePerTick: 1
+  _vampirismDamageCooldown: 0.1
+  _vampirismDuration: 6
+  _vampirismCooldownDuration: 4
   _playerStatsUI: {fileID: 7447509800558838476}
   _healthBar: {fileID: 0}
   _animator: {fileID: 4932328164641940658}
@@ -5417,7 +5418,7 @@ GameObject:
   - component: {fileID: 933787516885717417}
   - component: {fileID: 7974356926449330328}
   - component: {fileID: 5635142674828929950}
-  - component: {fileID: 5946593842717349941}
+  - component: {fileID: 2326332952926492574}
   m_Layer: 9
   m_Name: Circle
   m_TagString: Untagged
@@ -5528,7 +5529,7 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.5
---- !u!114 &5946593842717349941
+--- !u!114 &2326332952926492574
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -5540,4 +5541,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9c2cecf834264bd984ad8e66fb5c287c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _damagePerSecond: 10

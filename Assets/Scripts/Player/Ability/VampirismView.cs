@@ -6,17 +6,35 @@ public class VampirismView : MonoBehaviour
 {
     [SerializeField] private Image _fillImage;
     [SerializeField] private TMP_Text _activationKeyText;
+    [SerializeField] private Vampirism _vampirism;
 
-    public void SetProgress(float progress, bool clockwise = true)
+    private void OnEnable()
     {
-        if (_fillImage != null)
-        {
-            _fillImage.fillClockwise = clockwise;
-            _fillImage.fillAmount = Mathf.Clamp01(progress);
-        }
+        _vampirism.ProgressChanged += SetProgress;
+        _vampirism.ActivationKeyChanged += SetActivationKey;
+
+        SetProgress(_vampirism.Progress, _vampirism.ProgressClockwise);
+        SetActivationKey(_vampirism.ActivationKey);
     }
 
-    public void SetActivationKey(KeyCode key)
+    private void OnDisable()
+    {
+        _vampirism.ProgressChanged -= SetProgress;
+        _vampirism.ActivationKeyChanged -= SetActivationKey;
+    }
+
+    private void SetProgress(float progress, bool clockwise)
+    {
+        if (_fillImage == null)
+        {
+            return;
+        }
+
+        _fillImage.fillClockwise = clockwise;
+        _fillImage.fillAmount = Mathf.Clamp01(progress);
+    }
+
+    private void SetActivationKey(KeyCode key)
     {
         if (_activationKeyText != null)
         {
